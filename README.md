@@ -25,4 +25,4 @@ python test_DF.py --dataroot ./Dataset/DFDC --dataset_mode DFDC --model DFD --no
 ```
 
 ## Note
-If you have any problem when reading the paper or reproducing the code, please feel free to commit issue or email us [E-mail](xacheng1996@gmail.com).
+If you have any problem when reading the paper or reproducing the code, please feel free to commit issue or contact us (E-mail: xacheng1996@gmail.com).
