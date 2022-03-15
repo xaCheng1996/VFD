@@ -22,3 +22,6 @@ Test (on DFDC):
 
 ```
 python test_DF.py --dataroot ./Dataset/DFDC --dataset_mode DFDC --model DFD --no_flip --name experiment_name
+
+##Note
+If you have any problem when reading the paper or reproducing the code, please feel free to commit issue or email us [E-mail](xacheng1996@gmail.com).
