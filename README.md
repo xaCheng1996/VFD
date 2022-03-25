@@ -1,12 +1,14 @@
 # Released code for VFD
 This is the release code for CVPR2022 paper ["Voice-Face Homogeneity Tells Deepfake"](https://arxiv.org/abs/2203.02195).
 
-update 2020.3.25: We have rearranged the code and provided the pretrained model.
+update 2020.3.25: We have rearranged the code and provided the pretrained model. In addition, a sample test set from FakeAVCeleb is provided.
 
 ## Fair Comparison
 The critical contribution of this paper is to determine the authenticity of videos cross deepfake datasets via the matching view of voices and faces. Except for the Voxceleb2 (which is difficult to access by now), you can employ any generic visual-audio datasets as training sets and test the model in deepfake datasets. We regard it as a fair comparison.
 
 We applied the Transformer as the feature extractor to process the voice and face input. The ablation experiments show that these extractors will achieve SOTA results. However, we welcome any modifications to the feature extractors for efficiency or scalability as long as a clear statement of the model structure in the paper.
+
+We utilized the [DFDC](https://arxiv.org/abs/2006.07397) and [FakeAVCeleb](https://github.com/DASH-Lab/FakeAVCeleb) datasets as test sets.
 
 ## Quick Start
 
