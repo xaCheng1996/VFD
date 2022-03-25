@@ -1,5 +1,5 @@
 """
-Anonymous release of VFD
+Code release of VFD
 Part of the framework is borrowed from
 https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix
 Many thanks to these authors!
@@ -8,15 +8,8 @@ import time
 from options.train_options import TrainOptions
 from data import create_dataset
 from models import create_model
-import os
-import math
-import cv2
-from PIL import Image
-from util import util
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 import numpy as np
-import pylab as pl
 import torch
 import random
 
@@ -44,6 +37,7 @@ def auc(real, fake):
 
     from sklearn.metrics import roc_auc_score
     return roc_auc_score(target_all, label_all)
+
 
 if __name__ == '__main__':
     opt = TrainOptions().parse()

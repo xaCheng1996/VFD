@@ -31,25 +31,23 @@ class VoxImageDataset(BaseDataset):
         else:
             self.video_dataset_path = os.path.join(self.opt.dataroot, 'face')
             self.audio_dataset_path = os.path.join(self.opt.dataroot, 'voice')
-        self.video_list, self.audio_list = self.get_video_list(self.video_dataset_path, self.audio_dataset_path, self.stage)
+        self.video_list, self.audio_list = self.get_video_list(self.video_dataset_path, self.audio_dataset_path,
+                                                               self.stage)
         random.seed(3)
         self.transform = get_transform(self.opt)
 
     def __getitem__(self, index):
-
         skip = self.__len__() // 2
-        sample_exa = 3
-        video_path = self.video_list[index]
-        audio_path = self.audio_list[index]
-
+        sample_exa = 5
+        # print(audio_path)
         img_real = []
         aud_real = []
         img_fake = []
         aud_fake = []
 
-        image_input = Image.open(video_path).convert('RGB')
+        image_input = Image.open(self.video_list[index]).convert('RGB')
         img_d = self.transform(image_input)
-        audio = np.load(audio_path)
+        audio = np.load(self.audio_list[index])
         audio_d = librosa.util.normalize(audio)
         img_real.append(img_d)
         aud_real.append(audio_d)
@@ -65,7 +63,8 @@ class VoxImageDataset(BaseDataset):
             img_d = self.transform(image_input)
             img_fake.append(img_d)
 
-            audio = np.load(self.audio_list[ind])
+            audio = np.load(self.audio_list[ind], allow_pickle=True)
+            # print(audio)
             audio_d = librosa.util.normalize(audio)
             aud_fake.append(audio_d)
 
@@ -86,26 +85,24 @@ class VoxImageDataset(BaseDataset):
         return len(self.video_list)
 
     def get_video_list(self, dataset_path, audio_dataset_path, mode):
-        video_feat_path = os.path.join(dataset_path)
-        audio_feat_path = os.path.join(audio_dataset_path)
+        video_feat_path = os.path.join(dataset_path, 'fig')
+        audio_feat_path = os.path.join(audio_dataset_path, 'audio_feat_mel')
         id_list = [i for i in os.listdir(video_feat_path) if i.startswith('id')]
         video_path = []
         audio_path = []
 
-        # Too little data, train and val set are the same in the demo code,
-        # they will be distinguished in the official version.
         if mode == 'train':
-            id_list_new = id_list[0:1]
+            id_list_new = id_list[int(len(id_list) * 0.1):int(len(id_list) * 1.0)]
             len_max = 100000
         elif mode == 'val':
-            id_list_new = id_list[0:1]
+            id_list_new = id_list[int(len(id_list) * 0):int(len(id_list) * 0.1)]
             len_max = 15000
         else:
             id_list_new = id_list
             len_max = 15000
         cnt = 0
         id_list_new.sort()
-        print(id_list_new)
+
         for id in tqdm(id_list_new):
             id_video_split_path = os.path.join(video_feat_path, id)
             video_list = os.listdir(id_video_split_path)
@@ -118,7 +115,7 @@ class VoxImageDataset(BaseDataset):
                 for image in image_list:
                     if cnt_video > 40:
                         break
-                    audio_p = os.path.join(id, video, image.replace('.jpg','.npy')).replace('/', '_')
+                    audio_p = os.path.join(id, video, image.replace('.jpg', '.npy')).replace('/', '_')
                     if image.endswith('.jpg') and os.path.exists(os.path.join(audio_feat_path, audio_p)):
                         video_path.append(os.path.join(image_list_path, image))
                         audio_path.append(os.path.join(audio_feat_path, audio_p))

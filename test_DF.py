@@ -1,22 +1,10 @@
-import time
 from options.test_options import TestOptions
 from data import create_dataset
 from models import create_model
-import os
-import math
-import cv2
-from PIL import Image
-from util import util
-import matplotlib.pyplot as plt
-import numpy as np
 from tqdm import tqdm
-import pylab as pl
+import numpy as np
 import torch
-import random
-from torchvision import transforms
-from torchcam.cams import SmoothGradCAMpp
-from torchvision.transforms.functional import to_pil_image
-from torchcam.utils import overlay_mask
+
 
 def auc(real, fake):
     label_all = []
@@ -31,7 +19,9 @@ def auc(real, fake):
     from sklearn.metrics import roc_auc_score
     return roc_auc_score(target_all, label_all)
 
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 
 if __name__ == '__main__':
     opt = TestOptions().parse()  # get test options
@@ -51,7 +41,6 @@ if __name__ == '__main__':
 
     dataset_size = len(dataset)
     print('The number of test images dir = %d' % dataset_size)
-
 
     total_iters = 0
     label = None
@@ -74,4 +63,27 @@ if __name__ == '__main__':
             total_iters += 1
             pbar.update()
 
-    print(auc(real, fake))
+    import matplotlib.pyplot as plt
+    min_val = min(min(fake), min(real))
+    fake_new = []
+    real_new = []
+    for i in real:
+        real_new.append((i-min_val))
+        # real_new.append((i - min_val))
+    for i in fake:
+        fake_new.append((i-min_val))
+        # fake_new.append((i - min_val))
+    real = real_new
+    fake = fake_new
+    legend_font = {"family": "Times New Roman",
+                   "size": 18,
+                   }
+    plt.xticks([], fontproperties='Times New Roman', fontsize=20)
+    plt.yticks(np.arange(0, 800, 100), fontproperties='Times New Roman', fontsize=20)
+    plt.hist(fake, bins=20, facecolor="pink", edgecolor="black", alpha=0.7, label='Fake')
+    plt.hist(real, bins=20, facecolor="yellowgreen", edgecolor="black", alpha=0.7, label='Real')
+    plt.legend(loc='upper left', framealpha=1, prop=legend_font)
+    # plt.legend()
+    plt.show()
+
+    print('The auc is %.3f'%(auc(real, fake)))

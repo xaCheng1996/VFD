@@ -1,14 +1,7 @@
 import torch
 from .base_model import BaseModel
 from . import networks
-import numpy as np
-import torchvision
-from PIL import Image
 import torch.nn as nn
-import torch.nn.functional as F
-import os
-from util import util
-import torchvision.transforms as transforms
 
 class DFDModel(BaseModel):
 
@@ -33,10 +26,12 @@ class DFDModel(BaseModel):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.batch_size = opt.batch_size
 
-        self.netG_video = networks.define_G(3, 3, opt.ngf, 'transformer_video', opt.norm,
-                                            not opt.no_dropout, opt.init_type, opt.init_gain, self.gpu_ids).to(self.device)
-        self.netG_audio = networks.define_G(3, 3, opt.ngf, 'transformer_audio', opt.norm,
-                                            not opt.no_dropout, opt.init_type, opt.init_gain, self.gpu_ids).to(self.device)
+        self.netG_video = networks.define_G(netG='transformer_video', use_dropout=not opt.no_dropout,
+                                            init_type=opt.init_type, init_gain=opt.init_gain,
+                                            gpu_ids=self.gpu_ids).to(self.device)
+        self.netG_audio = networks.define_G(netG='transformer_audio', use_dropout=not opt.no_dropout,
+                                            init_type=opt.init_type, init_gain=opt.init_gain,
+                                            gpu_ids=self.gpu_ids).to(self.device)
 
         if self.isTrain:
             self.triplet_loss = nn.TripletMarginLoss(margin=100.0, p=2)
