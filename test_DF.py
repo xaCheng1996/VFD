@@ -11,10 +11,10 @@ def auc(real, fake):
     target_all = []
     for ind in real:
         target_all.append(1)
-        label_all.append(-ind)
+        label_all.append(ind)
     for ind in fake:
         target_all.append(0)
-        label_all.append(-ind)
+        label_all.append(ind)
 
     from sklearn.metrics import roc_auc_score
     return roc_auc_score(target_all, label_all)
