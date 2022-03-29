@@ -24,17 +24,16 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 if __name__ == '__main__':
-    opt = TestOptions().parse()  # get test options
-    # hard-code some parameters for test
-    opt.num_threads = 4  # test code only supports num_threads = 1
-    opt.batch_size = 1  # test code only supports batch_size = 1
-    opt.serial_batches = False  #r disable data shuffling; comment this line if results on randomly chosen images ae needed.
-    opt.no_flip = True  # no flip; comment this line if results on flipped images are needed.
-    opt.display_id = -1  # no visdom display; the test code saves the results to a HTML file.
+    opt = TestOptions().parse()
+    opt.num_threads = 4
+    opt.batch_size = 1
+    opt.serial_batches = False
+    opt.no_flip = True
+    opt.display_id = -1
     opt.mode = 'test'
-    dataset = create_dataset(opt)  # create a dataset given opt.dataset_mode and other options
-    model = create_model(opt)  # create a model given opt.model and other options
-    model.setup(opt)  # regular setup: load and print networks; create schedulers
+    dataset = create_dataset(opt)
+    model = create_model(opt)
+    model.setup(opt)
 
     model.eval()
 
