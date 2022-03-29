@@ -62,27 +62,4 @@ if __name__ == '__main__':
             total_iters += 1
             pbar.update()
 
-    import matplotlib.pyplot as plt
-    min_val = min(min(fake), min(real))
-    fake_new = []
-    real_new = []
-    for i in real:
-        real_new.append((i-min_val))
-        # real_new.append((i - min_val))
-    for i in fake:
-        fake_new.append((i-min_val))
-        # fake_new.append((i - min_val))
-    real = real_new
-    fake = fake_new
-    legend_font = {"family": "Times New Roman",
-                   "size": 18,
-                   }
-    plt.xticks([], fontproperties='Times New Roman', fontsize=20)
-    plt.yticks(np.arange(0, 800, 100), fontproperties='Times New Roman', fontsize=20)
-    plt.hist(fake, bins=20, facecolor="pink", edgecolor="black", alpha=0.7, label='Fake')
-    plt.hist(real, bins=20, facecolor="yellowgreen", edgecolor="black", alpha=0.7, label='Real')
-    plt.legend(loc='upper left', framealpha=1, prop=legend_font)
-    # plt.legend()
-    plt.show()
-
     print('The auc is %.3f'%(auc(real, fake)))
