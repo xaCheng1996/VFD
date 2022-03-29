@@ -36,8 +36,7 @@ if __name__ == '__main__':
     model = create_model(opt)  # create a model given opt.model and other options
     model.setup(opt)  # regular setup: load and print networks; create schedulers
 
-    if opt.eval:
-        model.eval()
+    model.eval()
 
     dataset_size = len(dataset)
     print('The number of test images dir = %d' % dataset_size)
